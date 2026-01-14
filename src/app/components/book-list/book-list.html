@@ -1,33 +1,61 @@
-<!-- src/app/book-list/book-list.component.html -->
+<!-- Netflix-Style Book List -->
 
 <div class="book-list-container">
-  <app-search-bar 
-    (searchByTitleEvent)="searchByTitle($event)"
-    (searchByYearEvent)="searchByYear($event)">
+  <app-search-bar (searchByTitle)="searchByTitle($event)" (searchByYear)="searchByYear($event)"
+    (sortChange)="onSortChange($event)">
   </app-search-bar>
 
-  <div *ngIf="isLoading" class="loading">Chargement des livres...</div>
-
-  <div *ngIf="!isLoading" class="books-grid">
-    <div 
-      *ngFor="let book of booksList" 
-      class="book-card"
-      (click)="onBookClick(book.key)"
-    >
-      <img 
-        [src]="getCoverImageUrl(book.cover_id)" 
-        [alt]="book.title"
-        class="book-cover"
-        onerror="this.src='assets/no-cover.jpg'"
-      />
-      <h3 class="book-title">{{ book.title }}</h3>
-      <p class="book-year" *ngIf="book.first_publish_year">
-        Première édition: {{ book.first_publish_year }}
+  <!-- Hero Banner -->
+  <div class="hero-section" *ngIf="!isLoading && booksList.length > 0">
+    <div class="hero-image">
+      <img [src]="getCoverImageUrl(booksList[0].cover_id)" [alt]="booksList[0].title"
+        onerror="this.src='assets/no-cover.jpg'" />
+    </div>
+    <div class="hero-gradient"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">{{ booksList[0].title }}</h1>
+      <p class="hero-year" *ngIf="booksList[0].first_publish_year">
+        {{ booksList[0].first_publish_year }}
       </p>
+      <button class="hero-btn" (click)="onBookClick(booksList[0].key)">
+        <span class="btn-icon">▶</span> Voir les détails
+      </button>
     </div>
   </div>
 
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="skeleton-row" *ngFor="let row of [1,2,3]">
+      <div class="skeleton-card" *ngFor="let card of [1,2,3,4,5,6]"></div>
+    </div>
+  </div>
+
+  <!-- Books Carousel -->
+  <div *ngIf="!isLoading" class="carousel-section">
+    <div class="carousel-row">
+      <h2 class="row-title">Livres populaires</h2>
+      <div class="books-carousel">
+        <div *ngFor="let book of booksList; let i = index" class="book-card" [style.animation-delay.ms]="i * 50"
+          (click)="onBookClick(book.key)">
+          <div class="book-image-wrapper">
+            <img [src]="getCoverImageUrl(book.cover_id)" [alt]="book.title" class="book-cover"
+              onerror="this.src='assets/no-cover.jpg'" />
+            <div class="book-overlay">
+              <h3 class="book-title">{{ book.title }}</h3>
+              <p class="book-year" *ngIf="book.first_publish_year">
+                {{ book.first_publish_year }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Results -->
   <div *ngIf="!isLoading && booksList.length === 0" class="no-results">
-    Aucun livre trouvé
+    <div class="no-results-icon">📚</div>
+    <h2>Aucun livre trouvé</h2>
+    <p>Essayez une autre recherche</p>
   </div>
 </div>

@@ -1,27 +1,28 @@
-<!-- src/app/search-bar/search-bar.component.html -->
+<!-- Netflix-Style Search Bar -->
 
 <div class="search-container">
   <div class="search-group">
     <label for="title-search">Recherche par titre:</label>
-    <input 
-      id="title-search"
-      type="text" 
-      [(ngModel)]="searchTitle" 
-      placeholder="Entrez le titre du livre"
-      class="search-input"
-    />
+    <input id="title-search" type="text" [(ngModel)]="titleQuery" placeholder="Entrez le titre du livre"
+      class="search-input" />
     <button (click)="onSearchByTitle()" class="search-btn">Rechercher</button>
   </div>
 
   <div class="search-group">
     <label for="year-search">Recherche par année:</label>
-    <input 
-      id="year-search"
-      type="number" 
-      [(ngModel)]="searchYear" 
-      placeholder="Année de première édition"
-      class="search-input"
-    />
+    <input id="year-search" type="number" [(ngModel)]="yearQuery" placeholder="Année de première édition"
+      class="search-input" />
     <button (click)="onSearchByYear()" class="search-btn">Rechercher</button>
+  </div>
+
+  <div class="search-group sort-group">
+    <label for="sort-select">Trier par:</label>
+    <select id="sort-select" [(ngModel)]="selectedSort" (change)="onSortChange()" class="sort-select">
+      <option value="">Par défaut</option>
+      <option value="title-asc">Titre (A-Z)</option>
+      <option value="title-desc">Titre (Z-A)</option>
+      <option value="year-asc">Année (Croissant)</option>
+      <option value="year-desc">Année (Décroissant)</option>
+    </select>
   </div>
 </div>

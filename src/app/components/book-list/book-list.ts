@@ -14,11 +14,12 @@ import { SearchBarComponent } from '../search-bar/search-bar';
 export class BookListComponent implements OnInit {
   booksList: any[] = [];
   isLoading: boolean = true;
+  currentSortOption: string = '';
 
   constructor(
     private bookService: BookService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadBooks();
@@ -29,6 +30,7 @@ export class BookListComponent implements OnInit {
     this.bookService.getBooks().subscribe((data) => {
       this.booksList = data.works;
       this.isLoading = false;
+      this.applySorting();
     });
   }
 
@@ -46,6 +48,7 @@ export class BookListComponent implements OnInit {
     this.bookService.searchByTitle(title).subscribe((data) => {
       this.booksList = data.docs;
       this.isLoading = false;
+      this.applySorting();
     });
   }
 
@@ -54,6 +57,39 @@ export class BookListComponent implements OnInit {
     this.bookService.searchByYear(year).subscribe((data) => {
       this.booksList = data.docs;
       this.isLoading = false;
+      this.applySorting();
+    });
+  }
+
+  onSortChange(sortOption: string): void {
+    this.currentSortOption = sortOption;
+    this.applySorting();
+  }
+
+  private applySorting(): void {
+    if (!this.currentSortOption || this.booksList.length === 0) {
+      return;
+    }
+
+    const [field, direction] = this.currentSortOption.split('-');
+
+    this.booksList.sort((a, b) => {
+      let valueA: any;
+      let valueB: any;
+
+      if (field === 'title') {
+        valueA = (a.title || '').toLowerCase();
+        valueB = (b.title || '').toLowerCase();
+      } else if (field === 'year') {
+        valueA = a.first_publish_year || 0;
+        valueB = b.first_publish_year || 0;
+      }
+
+      if (direction === 'asc') {
+        return valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
+      } else {
+        return valueA < valueB ? 1 : valueA > valueB ? -1 : 0;
+      }
     });
   }
 }

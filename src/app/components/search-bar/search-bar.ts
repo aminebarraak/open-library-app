@@ -12,9 +12,11 @@ import { FormsModule } from '@angular/forms';
 export class SearchBarComponent {
   titleQuery = '';
   yearQuery: number | null = null;
+  selectedSort = '';
 
   @Output() searchByTitle = new EventEmitter<string>();
   @Output() searchByYear = new EventEmitter<number>();
+  @Output() sortChange = new EventEmitter<string>();
 
   onSearchByTitle(): void {
     const value = this.titleQuery.trim();
@@ -27,5 +29,9 @@ export class SearchBarComponent {
     if (this.yearQuery != null) {
       this.searchByYear.emit(this.yearQuery);
     }
+  }
+
+  onSortChange(): void {
+    this.sortChange.emit(this.selectedSort);
   }
 }
