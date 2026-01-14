@@ -1,0 +1,49 @@
+<div class="book-list-container">
+  <div *ngIf="loading" class="loading">
+    <p>⏳ Chargement des livres...</p>
+  </div>
+
+  <div *ngIf="error" class="error">
+    <p>❌ {{ error }}</p>
+  </div>
+
+  <div *ngIf="!loading && filteredBooks.length === 0" class="no-books">
+    <p>📭 Aucun livre trouvé</p>
+  </div>
+
+  <div class="books-grid" *ngIf="!loading && filteredBooks.length > 0">
+    <div class="book-card" *ngFor="let book of filteredBooks">
+      <div class="book-cover">
+        <img 
+          *ngIf="book.cover_id" 
+          [src]="getCoverUrl(book.cover_id)" 
+          [alt]="book.title"
+          class="cover-image"
+        >
+        <div *ngIf="!book.cover_id" class="no-cover">
+          📖 Pas d'image
+        </div>
+      </div>
+      <div class="book-info">
+        <h3>{{ book.title }}</h3>
+        <p class="author" *ngIf="book.authors && book.authors.length > 0">
+          ✍️ {{ book.authors[0].name || 'Auteur inconnu' }}
+        </p>
+        <p class="author" *ngIf="!book.authors || book.authors.length === 0">
+          ✍️ Auteur inconnu
+        </p>
+        <p class="edition">📅 {{ book.first_publish_year || 'N/A' }}</p>
+        <p class="edition">📚 {{ book.edition_count || 1 }} édition(s)</p>
+        <p class="description" *ngIf="book.description">
+          {{ book.description.substring(0, 100) }}...
+        </p>
+        <a 
+          [routerLink]="['/details', getBookId(book.key)]" 
+          class="btn-details"
+        >
+          Voir détails →
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

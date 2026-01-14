@@ -1,0 +1,70 @@
+<div class="book-details-container">
+  <button (click)="goBack()" class="btn-back">← Retour à la liste</button>
+
+  <div *ngIf="loading" class="loading-spinner">
+    <div class="spinner"></div>
+    <p>⏳ Chargement des détails du livre...</p>
+  </div>
+
+  <div *ngIf="!loading && book" class="book-detail">
+    <div class="detail-header">
+      <div class="detail-cover">
+        <img 
+          *ngIf="getCoverUrl()" 
+          [src]="getCoverUrl()" 
+          [alt]="book.title"
+          class="cover-image"
+        >
+        <div *ngIf="!getCoverUrl()" class="no-cover">
+          📖 Pas d'image disponible
+        </div>
+      </div>
+
+      <div class="detail-info">
+        <h1>{{ book.title }}</h1>
+        <p *ngIf="book.subtitle" class="subtitle">{{ book.subtitle }}</p>
+        
+        <div class="metadata">
+          <div *ngIf="book.first_publish_year" class="meta-item">
+            <span class="label">📅 Année de publication:</span>
+            <span class="value">{{ book.first_publish_year }}</span>
+          </div>
+          
+          <div *ngIf="book.edition_count" class="meta-item">
+            <span class="label">📚 Nombre d'éditions:</span>
+            <span class="value">{{ book.edition_count }}</span>
+          </div>
+
+          <div *ngIf="book.key" class="meta-item">
+            <span class="label">🔑 Identifiant:</span>
+            <span class="value">{{ book.key }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-description">
+      <h2>📝 Description</h2>
+      <div *ngIf="book.description" class="description-content">
+        <p *ngIf="typeof book.description === 'string'">{{ book.description }}</p>
+        <p *ngIf="typeof book.description === 'object'">{{ book.description.value }}</p>
+      </div>
+      <div *ngIf="!book.description" class="no-description">
+        <p>Aucune description disponible pour ce livre</p>
+      </div>
+    </div>
+
+    <div *ngIf="getAuthors().length > 0" class="detail-authors">
+      <h2>✍️ Auteurs</h2>
+      <ul>
+        <li *ngFor="let author of getAuthors()">
+          {{ author.name || 'Auteur inconnu' }}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div *ngIf="error && !loading" class="error">
+    <p>⚠️ {{ error }}</p>
+  </div>
+</div>
