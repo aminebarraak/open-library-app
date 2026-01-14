@@ -1,0 +1,47 @@
+<!-- src/app/book-details/book-details.component.html -->
+
+<div class="book-details-container">
+  <button class="back-button" (click)="goBack()">← Retour à la liste</button>
+
+  <div *ngIf="isLoading" class="loading">Chargement des détails...</div>
+
+  <div *ngIf="!isLoading && book" class="book-details">
+    <div class="book-cover-section">
+      <img 
+        *ngIf="book.covers && book.covers[0]"
+        [src]="getCoverImageUrl(book.covers[0])" 
+        [alt]="book.title"
+        class="book-cover-large"
+        onerror="this.src='assets/no-cover.jpg'"
+      />
+    </div>
+
+    <div class="book-info-section">
+      <h1 class="book-title">{{ book.title }}</h1>
+      
+      <p class="book-subtitle" *ngIf="book.subtitle">
+        <strong>Sous-titre:</strong> {{ book.subtitle }}
+      </p>
+
+      <p class="book-year" *ngIf="book.first_publish_date">
+        <strong>Année d'édition:</strong> {{ book.first_publish_date }}
+      </p>
+
+      <p class="book-authors" *ngIf="book.authors && book.authors.length > 0">
+        <strong>Auteur(s):</strong> 
+        <span *ngFor="let author of book.authors; let last = last">
+          {{ author.author?.name || 'Inconnu' }}<span *ngIf="!last">, </span>
+        </span>
+      </p>
+
+      <div class="book-description">
+        <h2>Description</h2>
+        <p>{{ getDescription() }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && !book" class="error">
+    Livre non trouvé
+  </div>
+</div>

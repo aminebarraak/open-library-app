@@ -1,0 +1,33 @@
+<!-- src/app/book-list/book-list.component.html -->
+
+<div class="book-list-container">
+  <app-search-bar 
+    (searchByTitleEvent)="searchByTitle($event)"
+    (searchByYearEvent)="searchByYear($event)">
+  </app-search-bar>
+
+  <div *ngIf="isLoading" class="loading">Chargement des livres...</div>
+
+  <div *ngIf="!isLoading" class="books-grid">
+    <div 
+      *ngFor="let book of booksList" 
+      class="book-card"
+      (click)="onBookClick(book.key)"
+    >
+      <img 
+        [src]="getCoverImageUrl(book.cover_id)" 
+        [alt]="book.title"
+        class="book-cover"
+        onerror="this.src='assets/no-cover.jpg'"
+      />
+      <h3 class="book-title">{{ book.title }}</h3>
+      <p class="book-year" *ngIf="book.first_publish_year">
+        Première édition: {{ book.first_publish_year }}
+      </p>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && booksList.length === 0" class="no-results">
+    Aucun livre trouvé
+  </div>
+</div>

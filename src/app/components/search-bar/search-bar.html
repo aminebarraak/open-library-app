@@ -1,0 +1,27 @@
+<!-- src/app/search-bar/search-bar.component.html -->
+
+<div class="search-container">
+  <div class="search-group">
+    <label for="title-search">Recherche par titre:</label>
+    <input 
+      id="title-search"
+      type="text" 
+      [(ngModel)]="searchTitle" 
+      placeholder="Entrez le titre du livre"
+      class="search-input"
+    />
+    <button (click)="onSearchByTitle()" class="search-btn">Rechercher</button>
+  </div>
+
+  <div class="search-group">
+    <label for="year-search">Recherche par année:</label>
+    <input 
+      id="year-search"
+      type="number" 
+      [(ngModel)]="searchYear" 
+      placeholder="Année de première édition"
+      class="search-input"
+    />
+    <button (click)="onSearchByYear()" class="search-btn">Rechercher</button>
+  </div>
+</div>
